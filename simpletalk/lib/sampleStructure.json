@@ -1,0 +1,106 @@
+{
+	"bubbles": [
+		{
+			"bubbleName": "NAME1",
+			"points": 0,
+			"timeCreated": "TIME",
+			"children": [
+				{
+					"author": "USERNAME1",
+					"points": 0,
+					"timeCreated": "TIME",
+					"comment": "THIS IS A COMMENT",
+					"children": [
+						{
+							"author": "USERNAME7",
+							"points": 0,
+							"timeCreated": "TIME",
+							"comment": "THIS IS A COMMENT",
+							"children": []
+						},
+						{
+							"author": "USERNAME8",
+							"points": 0,
+							"timeCreated": "TIME",
+							"comment": "THIS IS A COMMENT",
+							"children": []
+						}
+					]
+				},
+				{
+					"author": "USERNAME2",
+					"points": 0,
+					"timeCreated": "TIME",
+					"comment": "THIS IS A COMMENT",
+					"children": []
+				},
+				{
+					"author": "USERNAME3",
+					"points": 0,
+					"timeCreated": "TIME",
+					"comment": "THIS IS A COMMENT",
+					"children": [
+						{
+							"author": "USERNAME9",
+							"points": 0,
+							"timeCreated": "TIME",
+							"comment": "THIS IS A COMMENT",
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"bubbleName": "NAME2",
+			"points": 0,
+			"timeCreated": "TIME",
+			"children": [
+				{
+					"author": "USERNAME4",
+					"points": 0,
+					"timeCreated": "TIME",
+					"comment": "THIS IS A COMMENT",
+					"children": []
+				},
+				{
+					"author": "USERNAME5",
+					"points": 0,
+					"timeCreated": "TIME",
+					"comment": "THIS IS A COMMENT",
+					"children": []
+				}
+			]
+		},
+		{
+			"bubbleName": "NAME3",
+			"points": 0,
+			"timeCreated": "TIME",
+			"children": [
+				{
+					"author": "USERNAME6",
+					"points": 0,
+					"timeCreated": "TIME",
+					"comment": "THIS IS A COMMENT",
+					"children": [
+						{
+							"author": "USERNAME10",
+							"points": 0,
+							"timeCreated": "TIME",
+							"comment": "THIS IS A COMMENT",
+							"children": [
+								{
+									"author": "USERNAME11",
+									"points": 0,
+									"timeCreated": "TIME",
+									"comment": "THIS IS A COMMENT",
+									"children": []
+								}
+							]
+						}
+					]
+				}
+			]
+		}
+	]
+}
