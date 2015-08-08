@@ -20,9 +20,15 @@ CommentTree.prototype.displayComments = function() {
 	// iterate through each bubble
 	for (i in tree.bubbles) {
 
+		if (i == 0)
+			treeString.ts += "<ul class='list-group'>";
+
 		// traverse all comment nodes
 		traverse2(tree.bubbles[i], "", treeString);
-		treeString.ts += "</ul>"
+		//treeString.ts += "</ul>"
+
+		if (i == tree.bubbles.length - 1)
+			treeString.ts += "</ul>";
 	}
 
 	return treeString.ts;// += "</ul>";
@@ -39,19 +45,23 @@ function traverse(node, indent, treeString) {
 }
 
 function traverse2(node, indent, treeString) {
+
 	if (node.bubbleName)
 		treeString.ts += "<li class='list-group-item'>" + indent + node.bubbleName;
 	else
 		treeString.ts += "<li class='list-group-item'>" + indent + node.comment;
-	for (i in node.children) {
+
+	for (var i = 0; i < node.children.length; i++) {
+
 		if (i == 0)
 			treeString.ts += "<ul class='list-group'>";
+
 		traverse2(node.children[i], indent + "--", treeString);
+
 		if (i == node.children.length - 1)
 			treeString.ts += "</ul>";
 	}
-	if (node.bubbleName)
-		treeString.ts += "</ul>";
+	
 	treeString.ts += "</li>";
 }
 

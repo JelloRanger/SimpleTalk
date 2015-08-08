@@ -5,31 +5,19 @@ var CommentTree = require('../lib/CommentTree');
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  /*var db = req.db;
+  	var db = req.db;
 
-  var collection = db.get('comments');
+  	var collection = db.get('comments');
+	
+	collection.find({}, {}, function(err, docs) {		
+		var ct = new CommentTree(docs[0]);
 
-  collection.find({}. {}. function(err, docs) {
-  	res.render('index', {
-  		"root": docs
-  	});
-  });*/
+		var treeString = ct.displayComments();
 
-
-	var ct = new CommentTree(sampleStructure);
-
-	var treeString = ct.displayComments();
-
-	//res.contentType('text/plain');
-	res.render('index', {
-		"tree": treeString
+		res.render('index', {
+			"tree": treeString
+		});
 	});
 });
-
-var initializeDatabase = function(db) {
-	var collection = db.get('comments');
-
-	collection.insert()
-}
 
 module.exports = router;
