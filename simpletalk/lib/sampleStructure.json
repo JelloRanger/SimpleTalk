@@ -1,17 +1,20 @@
 {
 	"bubbles": [
 		{
+			"id": "123456",
 			"bubbleName": "NAME1",
 			"points": 0,
 			"timeCreated": "TIME",
 			"children": [
 				{
+					"id": "123455",
 					"author": "USERNAME1",
 					"points": 0,
 					"timeCreated": "TIME",
 					"comment": "THIS IS A COMMENT",
 					"children": [
 						{
+							"id": "123454",
 							"author": "USERNAME7",
 							"points": 0,
 							"timeCreated": "TIME",
@@ -19,6 +22,7 @@
 							"children": []
 						},
 						{
+							"id": "123453",
 							"author": "USERNAME8",
 							"points": 0,
 							"timeCreated": "TIME",
@@ -28,6 +32,7 @@
 					]
 				},
 				{
+					"id": "123452",
 					"author": "USERNAME2",
 					"points": 0,
 					"timeCreated": "TIME",
@@ -35,12 +40,14 @@
 					"children": []
 				},
 				{
+					"id": "123451",
 					"author": "USERNAME3",
 					"points": 0,
 					"timeCreated": "TIME",
 					"comment": "THIS IS A COMMENT",
 					"children": [
 						{
+							"id": "123446",
 							"author": "USERNAME9",
 							"points": 0,
 							"timeCreated": "TIME",
@@ -52,11 +59,13 @@
 			]
 		},
 		{
+			"id": "123436",
 			"bubbleName": "NAME2",
 			"points": 0,
 			"timeCreated": "TIME",
 			"children": [
 				{
+					"id": "123426",
 					"author": "USERNAME4",
 					"points": 0,
 					"timeCreated": "TIME",
@@ -64,6 +73,7 @@
 					"children": []
 				},
 				{
+					"id": "123416",
 					"author": "USERNAME5",
 					"points": 0,
 					"timeCreated": "TIME",
@@ -73,23 +83,27 @@
 			]
 		},
 		{
+			"id": "123356",
 			"bubbleName": "NAME3",
 			"points": 0,
 			"timeCreated": "TIME",
 			"children": [
 				{
+					"id": "123256",
 					"author": "USERNAME6",
 					"points": 0,
 					"timeCreated": "TIME",
 					"comment": "THIS IS A COMMENT",
 					"children": [
 						{
+							"id": "123156",
 							"author": "USERNAME10",
 							"points": 0,
 							"timeCreated": "TIME",
 							"comment": "THIS IS A COMMENT",
 							"children": [
 								{
+									"id": "122456",
 									"author": "USERNAME11",
 									"points": 0,
 									"timeCreated": "TIME",
