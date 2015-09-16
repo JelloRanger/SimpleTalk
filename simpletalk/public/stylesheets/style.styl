@@ -19,12 +19,15 @@ global-reset()
  */
 main-color = #fa5b4d
 background-color = #faf9f0
+main-color-darken = #f82614
 comment-bg-color = #E1E0D8
 
 body
-  font-family 'Quicksand'
+  font-family 'Quicksand' !important
+  font-size 1.5em !important
   background-color background-color
   color #444
+  padding-bottom 10px
 
 header
   font-family 'Quicksand'
@@ -40,3 +43,130 @@ header
   background-color main-color
   border-bottom 1px solid darken(main-color, 30%)
   text-shadow 0px -1px 0px darken(main-color, 30%)
+
+ul
+  background comment-bg-color
+
+textarea
+  resize vertical
+
+#logo
+  position absolute
+  float left
+  max-width 18%
+  max-height 18%
+
+.commentText
+  display inline-block
+  padding 10px 2px
+
+.timeCreated
+  font-size 80%
+  font-style italic
+  padding-right 5px
+  padding-left 5px
+
+.timeLastEdited
+  font-size 80%
+  font-style italic
+  display block
+
+.footerText
+  font-size 80%
+  color #444
+
+.link-icon
+  text-decoration none !important
+  color main-color !important
+
+.link-icon:hover
+  color main-color-darken !important
+
+.link-box
+  width 10%
+  height 200px
+  line-height 200px
+  display inline-block
+  padding 10px 10px 10px 10px
+  text-align center
+
+.fa-4x
+  -o-transition .5s
+  -ms-transition .5s
+  -moz-transition .5s
+  -webkit-transition .5s
+  transition .5s
+
+.fa-4x
+  font-size 6em !important
+
+/*.list-group-item
+  margin-bottom 1px !important*/
+
+.input-group-btn
+  vertical-align top !important
+
+#addCommentContainer
+  padding-top 5px
+  padding-bottom 5px
+
+.list-group-item
+  
+  white-space pre-wrap
+  white-space -moz-pre-wrap
+  white-space -pre-wrap
+  white-space -o-pre-wrap
+  word-wrap break-word
+
+  -o-transition .5s
+  -ms-transition .5s
+  -moz-transition .5s
+  -webkit-transition .5s
+  transition .5s
+
+.list-group-item:hover
+  border 1px solid main-color !important
+  -o-transition .5s
+  -ms-transition .5s
+  -moz-transition .5s
+  -webkit-transition .5s
+  transition .5s
+
+// activate top border of next list-group-item when above
+// element is hovered since the borders overlap
+.list-group-item:hover + .list-group-item
+  border-top 1px solid main-color !important
+  -o-transition .5s
+  -ms-transition .5s
+  -moz-transition .5s
+  -webkit-transition .5s
+  transition .5s
+
+.list-group-item
+
+  // alternative padding scheme, looks nice, might use later
+  /*padding-left 25px !important
+  padding-right 5px !important
+  padding-bottom 0px !important*/
+  background #ffffff !important
+
+.list-group-item > ul > .list-group-item
+  background #fcfcfc !important
+
+.list-group-item > ul > .list-group-item > ul > .list-group-item
+  background #ffffff !important
+
+.list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item
+  background #fcfcfc !important
+
+.list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item
+  background #ffffff !important
+
+.list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item
+  background #fcfcfc !important
+
+.list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item
+  background #ffffff !important
+
+.list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item > ul > .list-group-item
+  background #fcfcfc !important

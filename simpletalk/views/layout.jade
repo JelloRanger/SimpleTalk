@@ -1,13 +1,144 @@
-doctype html
+<!doctype html>
 html
 	head
-		title= title
+		title SimpleTalk
 		link(rel='stylesheet', href='/stylesheets/style.css')
 		link(href='//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css', rel='stylesheet')
-	body(ng-app="simpleTalk", np-controller="mainController")
+		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css')
+		link(rel="icon", href="/images/favicon.ico", type="image/x-icon")
+		script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js')
+		script.
+			$(document).ready(function() {
+
+				// Expand the text input field to a textarea and vice versa
+				$('.expandButton').click(function() {
+
+					// grab input text field and textarae
+					var inputTextField = $(this).closest('form').find('input[type=text]');
+					var textareaField = $(this).closest('form').find('textarea');
+
+					// toggle between input text field and textarea
+					inputTextField.toggle();
+					textareaField.toggle();
+
+					// alter required/disabled attributes based on which field is being displayed
+					if (inputTextField.attr("required")) {
+						inputTextField.removeAttr("required");
+						inputTextField.attr("disabled", true);
+						textareaField.attr("required", true);
+						textareaField.removeAttr("disabled");
+
+						// convert <br> tags to line breaks
+						textareaField.val(inputTextField.val().replace(/<br\s*[\/]?>/gi, '\n'));
+
+						$(this).html("-");
+					}
+					else {
+						textareaField.removeAttr("required");
+						textareaField.attr("disabled", true);
+						inputTextField.attr("required", true);
+						inputTextField.removeAttr("disabled");
+
+						// preserve line breaks with <br> tags
+						inputTextField.val(textareaField.val().replace(/\n/g, '<br/>'));
+
+						$(this).html("+");
+					}
+				});
+
+				// submit an ajax post request for adding a comment/bubble
+				$('.addCommentForm').submit(function(e) {
+
+					// prevent regular form submission
+					e.preventDefault();
+
+					// keep track of the position of the parent comment
+					var parentPos = $(this).parent().parent().offset().top;
+
+					$.ajax({
+						type: "POST",
+						url: "/addcomment",
+						data: $(this).serialize(),
+						success: function(data) {
+
+							// if new comment would appear outside of current viewport, move scrollbar
+							// to location of the new comment
+							// TODO: Currently only works if new comment is ABOVE viewport, not below
+							if (window.innerHeight < parentPos && parentPos < (window.scrollY)) {
+								$('html, body').animate({
+									scrollTop: parentPos
+								}, 0, function() {
+									window.location.reload();
+								});
+							} 
+
+							// otherwise just refresh the page since the new comment is in the viewport
+							else {
+								window.location.reload();
+							}
+
+
+						},
+						error: function(e) {
+							console.log("Error: Unable to send data to server");
+						}
+					});
+
+					// guarantee input text field and text area are cleared
+					$(this).closest('form').find("input[type=text]").val("");
+					$(this).closest('form').find("textarea").val("");
+
+					// guarantee input text field is not disabled
+					$(this).closest('form').find("input[type=text]").removeAttr('disabled');
+				});
+
+				// submit an ajax post request for deleting a comment/bubble
+				// (this allows us to delete comments without a page refresh)
+				$('.deleteForm').submit(function(e) {
+
+					// prevent regular form submission
+					e.preventDefault();
+
+					var deleteMe = $(this);
+
+					$.ajax({
+						type: "POST",
+						url: "/delcomment",
+						data: $(this).serialize(),
+						success: function(data) {
+
+							// the backend has deleted the comment
+							// remove the comment on the client side
+							deleteMe.parent('li').remove();
+						},
+						error: function(e) {
+							alert("error");
+						}
+					});
+				});
+			});
+
+			
+	body
+		.container
+			a(href='/')
+				img(id='logo' src='/images/simpletalklogotransparent.png')
 		header
+
 			h1 SimpleTalk
 			h6 Talking Simply.
+
 		.container
 			block content
+		div.text-center
+			div.link-box
+				a.link-icon(href='https://github.com/JelloRanger/SimpleTalk' target='_blank')
+					i.fa.fa-github-square.fa-4x(title='GitHub')
+			div.link-box
+				a.link-icon(href='mailto:jacob@jabramson.com')
+					i.fa.fa-envelope-square.fa-4x(title='Email')
+		p.footerText.text-center &copy; Jacob Abramson 2015. All rights reserved.
+		
+
+
 		
