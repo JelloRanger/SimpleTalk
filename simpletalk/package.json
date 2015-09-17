@@ -16,6 +16,8 @@
     "mongodb": "~2.0.33",
     "monk": "~1.0.1",
     "stylus": "*",
-    "nib": "*"
+    "nib": "*",
+    "sanitize-html": "*",
+    "moment": "*"
   }
 }
