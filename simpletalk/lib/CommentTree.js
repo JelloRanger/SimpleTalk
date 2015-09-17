@@ -11,7 +11,7 @@ var moment = require('moment');
 var sanitizeHtml = require('sanitize-html');
 
 // prefix/suffix for bubble name/comment items
-bubbleNamePrefix = "<li class='list-group-item'>";
+bubbleNamePrefix = "<li class='list-group-item bubbleItem'>";
 commentPrefix = "<li class='list-group-item'>";
 bubbleNameSuffix = "";
 itemSuffix = "</li>";
@@ -19,7 +19,7 @@ itemSuffix = "</li>";
 groupPrefix = "<ul class='list-group'>";
 groupSuffix = "</ul>";
 
-replyPrefix = "<div id='addCommentContainer'><form class='addCommentForm' name='addcomment' id='addCommentForm'>" +
+replyPrefix = "<form class='addCommentForm' name='addcomment' id='addCommentForm'>" +
 				"<div class='input-group'>" +
 					"<input class='form-control commentContent oneLine' required type='text' placeholder='Reply!' name='commentContent'>" +
 					"<textarea style='display:none' rows='4' disabled class='form-control commentContent multiLine' placeholder='Reply!' name='commentContent'></textarea>" +
@@ -30,7 +30,7 @@ replySuffix = "'>" +
 						"<button class='btn btn-danger expandButton' type='button' title='Expand'>+</button>" +
 						"<button class='btn btn-danger submitButton' type='submit' title='Submit Comment'>submit</button>" +
 					"</span>" +
-				"</div></form></div>";
+				"</div></form>";
 
 replyForm = "<div id='addCommentContainer'><form class='addCommentForm' name='addcomment' id='addCommentForm'>" +
 				"<div class='input-group'>" +
@@ -53,9 +53,14 @@ delPrefix = "<form class='deleteForm pull-right' name='delcomment'>" +
 				"<input id='commentId' type='hidden' name='commentId' value='";
 
 delSuffix = "'>" +
-			"<button class='btn btn-default btn-xs type='submit' title='Delete Comment'>" +
+			"<button class='btn btn-default btn-xs' type='submit' title='Delete Comment'>" +
 				"<span class='glyphicon glyphicon-remove'></span>" +
 			"</button></form>";
+
+// close bubble form
+closeBubbleForm = "<div class='pull-right'><button class='btn btn-default btn-xs closeBubble' type='submit' title='Close Bubble'>" +
+					"<span class='glyphicon glyphicon-minus'></span>" +
+				  "</button></div>";
 
 // constructor
 function CommentTree(properties) {
@@ -244,6 +249,9 @@ function generateTreeStructure(node, treeString) {
 		treeString.ts += commentPrefix
 
 	treeString.ts += getDeleteCommentForm(node);
+
+	if (node.bubbleName)
+		treeString.ts += closeBubbleForm;
 
 	treeString.ts += getTimeFromNow(node);
 
