@@ -150,7 +150,7 @@ CommentTree.prototype.addBubble = function(bubbleN) {
 	var tree = this.structure;
 
 	// sanitize bubble name
-	var cleanBubbleName = sanitizeHtml(bubbleN);
+	var cleanBubbleName = sanitizeHtml(bubbleN,  { allowedTags: []});
 
 	tree.bubbles.push({ bubbleName : cleanBubbleName, points : 0, timeCreated : new Date(), children : [], id : new ObjectID()});
 }

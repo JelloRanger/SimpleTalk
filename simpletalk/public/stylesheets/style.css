@@ -189,15 +189,7 @@ textarea {
 .input-group-btn {
   vertical-align: top !important;
 }
-#addCommentContainer {
-  padding-top: 5px;
-  padding-bottom: 5px;
-  max-width: 100%;
-  max-height: 100%;
-}
 .addCommentForm {
-/*padding-top 2px
-  padding-bottom 2px*/
   margin-top: 20px;
   margin-bottom: 20px;
   width: 100%;
@@ -229,6 +221,15 @@ textarea {
   -o-transition: 0.5s;
   -ms-transition: 0.5s;
   transition: 0.5s;
+}
+.bubbleClosed:hover {
+  -webkit-box-shadow: 0px 0px 20px #fa5b4d;
+  box-shadow: 0px 0px 20px #fa5b4d;
+  cursor: pointer;
+}
+.bubbleClosed:hover + .list-group-item {
+  -webkit-box-shadow: inset 0px 20px 20px -20px #fa5b4d;
+  box-shadow: inset 0px 20px 20px -20px #fa5b4d;
 }
 .list-group-item:hover + .list-group-item {
   border-top: 1px solid #fa5b4d !important;

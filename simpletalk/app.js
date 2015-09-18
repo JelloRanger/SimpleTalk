@@ -12,6 +12,7 @@ var monk = require('monk');
 var db = monk('localhost:27017/simpletalk');
 
 var routes = require('./routes/index');
+//var routes = require('./routes/login');
 
 var app = express();
 
@@ -27,6 +28,7 @@ function compile(str, path) {
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+//app.use('/', routes);
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -45,6 +47,12 @@ app.use(function(req, res, next) {
 });
 
 app.use('/', routes);
+
+//app.use(app.router);
+//routes.initialize(app);
+
+//app.get('/', routes.index);
+//app.get('/login', routes.login);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

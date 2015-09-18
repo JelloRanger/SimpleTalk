@@ -10,6 +10,12 @@ html
 		script.
 			$(document).ready(function() {
 
+				// hide all bubble contents on page load
+				/*var displayed_class = $.cookie('displayedClass');
+				alert(displayed_class);
+				if (!displayed_class)
+					$('.bubbleItem').children().hide();*/
+
 				// expand the text input field to a textarea and vice versa
 				$('.expandButton').click(function() {
 
@@ -48,6 +54,7 @@ html
 
 				// open bubble's content upon clicking the bubble item
 				$('.bubbleItem').click(function() {
+					$(this).removeClass('bubbleClosed');
 					$(this).children().slideDown();
 				});
 
@@ -55,6 +62,7 @@ html
 				$('.closeBubble').click(function(e) {
 					e.stopImmediatePropagation();
 					$(this).parent().parent().children().slideUp();
+					$(this).parent().parent().addClass('bubbleClosed');
 				});
 
 				// submit an ajax post request for adding a comment/bubble

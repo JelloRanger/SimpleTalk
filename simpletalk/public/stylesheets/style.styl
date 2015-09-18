@@ -111,9 +111,7 @@ textarea
   margin-bottom 20px
   width 100%
 
-
-.list-group-item
-  
+.list-group-item  
   white-space pre-wrap
   white-space -moz-pre-wrap
   white-space -pre-wrap
@@ -133,6 +131,14 @@ textarea
   -moz-transition .5s
   -webkit-transition .5s
   transition .5s
+
+.bubbleClosed:hover
+  box-shadow 0px 0px 20px main-color
+  cursor pointer
+
+.bubbleClosed:hover + .list-group-item
+  //box-shadow 0px -10px 10px -10px main-color
+  box-shadow inset 0px 20px 20px -20px main-color
 
 // activate top border of next list-group-item when above
 // element is hovered since the borders overlap
