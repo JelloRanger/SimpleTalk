@@ -127,9 +127,6 @@ header {
 ul {
   background: #e1e0d8;
 }
-textarea {
-  resize: vertical;
-}
 #logo {
   position: absolute;
   float: left;
@@ -150,6 +147,11 @@ textarea {
   font-size: 80%;
   font-style: italic;
   display: block;
+}
+.editCommentArea {
+  width: 100%;
+  resize: vertical;
+  height: 100px;
 }
 .footerText {
   font-size: 80%;
@@ -194,12 +196,20 @@ textarea {
   margin-bottom: 20px;
   width: 100%;
 }
-.list-group-item {
+.multiLine {
+  resize: vertical;
+}
+.bubbleText,
+.commentText {
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
   word-wrap: break-word;
+  width: auto;
+  display: inline;
+}
+.list-group-item {
   -o-transition: 0.5s;
   -ms-transition: 0.5s;
   -moz-transition: 0.5s;

@@ -62,6 +62,13 @@ closeBubbleForm = "<div class='pull-right'><button class='btn btn-default btn-xs
 					"<span class='glyphicon glyphicon-minus'></span>" +
 				  "</button></div>";
 
+// edit button
+editPrefix = "<form class='editButtonForm' name='editcomment'>" +
+				"<button class='btn btn-danger btn-xs editButton' type='submit' title='Edit'>edit</button> " +
+			 	"<button style='display:none' class='btn btn-danger btn-xs cancelEditButton' type='submit' title='Cancel'>cancel</button>" +
+			 	"<input id='commentId' type='hidden' name='commentId' value='";
+editSuffix = "'></form>";
+
 // constructor
 function CommentTree(properties) {
 	this.structure = properties;
@@ -117,19 +124,6 @@ CommentTree.prototype.getStructure = function() {
 	return this.structure;
 }
 
-// add comment to the comment tree given its parent
-CommentTree.prototype.addComment = function(commentContent, parent) {
-
-	var tree = this.structure;
-
-	for (i in tree.bubbles) {
-
-		//checkParent(tree.bubbles[i], commentContent, parent);
-
-		traverseAdd(tree.bubbles[i], checkParent, commentContent, parent);
-	}
-}
-
 // add bubble to the comment tree
 CommentTree.prototype.addBubble = function(bubbleN) {
 
@@ -153,6 +147,30 @@ CommentTree.prototype.addBubble = function(bubbleN) {
 	var cleanBubbleName = sanitizeHtml(bubbleN,  { allowedTags: []});
 
 	tree.bubbles.push({ bubbleName : cleanBubbleName, points : 0, timeCreated : new Date(), children : [], id : new ObjectID()});
+}
+
+// add comment to the comment tree given its parent
+CommentTree.prototype.addComment = function(commentContent, parent) {
+
+	var tree = this.structure;
+
+	for (i in tree.bubbles) {
+
+		//checkParent(tree.bubbles[i], commentContent, parent);
+
+		traverseAdd(tree.bubbles[i], checkParent, commentContent, parent);
+	}
+}
+
+// update comment from the comment tree given its id
+CommentTree.prototype.updateComment = function(commentContent, commentId) {
+
+	var tree = this.structure;
+
+	for (i in tree.bubbles) {
+
+		traverseUpdate(tree.bubbles[i], commentContent, commentId);
+	}
 }
 
 // remove comment from the comment tree given its id
@@ -182,7 +200,7 @@ function checkParent(node, commentContent, parent) {
 
 		// sanitize comment content
 		console.log(commentContent);
-		var cleanComment = commentContent;//sanitizeHtml(commentContent);
+		var cleanComment = sanitizeHtml(commentContent);
 
 		node.children.push({ author : "ANON", points : 0, timeCreated : new Date().toISOString(), 
 							 timeLastEdited : new Date().toISOString(), comment : cleanComment, 
@@ -204,7 +222,26 @@ function traverseAdd(node, fn, commentContent, parent) {
 	}
 }
 
-// traverse nodes, applying the function and args provided
+// traverse nodes, updating comment if found
+function traverseUpdate(node, commentContent, commentId) {
+
+	for (i in node.children) {
+
+		// check if comment id matches, if so update
+		if (node.children[i].id == commentId) {
+			console.log("Updating comment...");
+			var cleanComment = sanitizeHtml(commentContent);
+			node.children[i].comment = cleanComment;
+			node.children[i].timeLastEdited = new Date().toISOString();
+			break;
+		}
+
+		// recurse further into comment tree
+		traverseUpdate(node.children[i], commentContent, commentId);
+	}
+}
+
+// traverse nodes, removing comment if found
 function traverseRemove(node, commentId) {
 
 	for (i in node.children) {
@@ -256,12 +293,17 @@ function generateTreeStructure(node, treeString) {
 	treeString.ts += getTimeFromNow(node);
 
 	if (node.bubbleName)
-		treeString.ts += node.bubbleName + bubbleNameSuffix;
+		treeString.ts += "<div class='bubbleText'>" + node.bubbleName + "</div>" + bubbleNameSuffix;
 	else
-		treeString.ts += node.comment;
+		treeString.ts += "<div class='commentText'>" + node.comment + "</div>";
 
-	// add last edited time if it differs from time created
-	treeString.ts += getTimeLastEdited(node);
+	if (!node.bubbleName) {
+		// add last edited time if it differs from time created for comments
+		treeString.ts += getTimeLastEdited(node);
+
+		// add edit button form for comments
+		treeString.ts += getEditCommentForm(node);
+	}
 
 	// add reply form
 	treeString.ts += getReplyForm(node);
@@ -301,6 +343,11 @@ function getDeleteCommentForm(node) {
 		return delForm;
 
 	return delPrefix + node.id + delSuffix;
+}
+
+// add in comment id into edit comment form
+function getEditCommentForm(node) {
+	return editPrefix + node.id + editSuffix;
 }
 
 // add in parent comment id into comment form

@@ -61,8 +61,94 @@ html
 				// close bubble on button click
 				$('.closeBubble').click(function(e) {
 					e.stopImmediatePropagation();
-					$(this).parent().parent().children().slideUp();
+					$(this).parent().parent().children(':not(.bubbleText)').slideUp();
 					$(this).parent().parent().addClass('bubbleClosed');
+				});
+
+				// edit comment
+				$('.editButton').click(function(e) {
+					e.preventDefault();
+					
+					// grab the current comment content
+					var commentTextElement = $(this).parent().parent().children('.commentText');
+
+					// open edit box
+					if ($(this).text() == 'edit') {
+						
+						// change button to submit
+						$(this).text('save');
+
+						// add textarea for comment editing and hide current comment content
+						commentTextElement.hide();
+						commentTextElement.after("<textarea class='editCommentArea'>" + 
+							commentTextElement.html().replace(/<br\s*[\/]?>/gi, '\n') + "</textarea>"); // replace <br> with new lines
+
+						// make the cancel button visible
+						$(this).next('.cancelEditButton').show();
+					}
+
+					// submit edited comment
+					else {
+
+						// grab textarea containing edited text
+						var revisedCommentText = $(this).parent().parent().children('.editCommentArea');
+
+
+						// compare current comment text to updated text, if the same don't bother contacting server
+						if (revisedCommentText.val() != commentTextElement.html()) {
+
+							// send the updated content along with the comment id to the backend
+							var data = {
+								text: revisedCommentText.val(),
+								commentId: revisedCommentText.siblings('.editButtonForm').children('#commentId').val()
+							}
+
+							$.ajax({
+								type: "POST",
+								url: "/editcomment",
+								data: data,
+								success: function() {
+
+									// the backend has updated the comment
+									// update the comment on the client side if no HTML sanitization required
+									var checkForHTML = $("<div/>").html(revisedCommentText.val()).text();
+
+									// if the lengths are the same, then no HTML tags are present and no HTML sanitization is required
+									// thus, we can simply update the comment on the page without a refresh
+									if (revisedCommentText.val().length == checkForHTML.length) {
+										commentTextElement.text(revisedCommentText.val());
+									}
+
+									// otherwise, refresh the page, so we can display the sanitized HTML
+									else {
+										window.location.reload();
+									}
+								},
+								error: function() {
+									console.log("Error: Unable to update comment from server");
+								}
+							});
+						}
+						
+						// hide edit textarea, show (updated) comment text
+						commentTextElement.show();
+						revisedCommentText.remove();
+
+						// submission complete, change button name to edit, hide cancel button
+						$(this).text('edit');
+						$(this).next('.cancelEditButton').hide();
+					}
+				});
+
+				// cancel editing a comment
+				$('.cancelEditButton').click(function(e) {
+					e.preventDefault();
+
+					// show comment text, remove edit textarea, rename save button to edit, and hide this button
+					$(this).parent().siblings('.commentText').show();
+					$(this).parent().siblings('.editCommentArea').remove();
+					$(this).siblings('.editButton').text('edit');
+					$(this).hide();
 				});
 
 				// submit an ajax post request for adding a comment/bubble

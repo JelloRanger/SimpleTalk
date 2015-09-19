@@ -1,5 +1,6 @@
 var express = require('express');
 var router = express.Router();
+var entities = require('entities');
 var sampleStructure = require('../lib/sampleStructure.json');
 var CommentTree = require('../lib/CommentTree');
 
@@ -50,6 +51,24 @@ router.post('/addcomment', function(req, res) {
 	}
 
 	// let the client know the request was successful
+	res.send();
+});
+
+// handle edit comment call
+router.post('/editcomment', function(req, res) {
+
+	var db = req.db;
+	var collection = db.get('comments');
+
+	var revisedCommentText = entities.decodeHTML(req.body.text);
+	var commentId = req.body.commentId;
+
+	// DEBUG
+	console.log(revisedCommentText);
+	console.log(commentId);
+
+	updateComment(db, collection, revisedCommentText, commentId);
+
 	res.send();
 });
 
@@ -114,6 +133,19 @@ function addComment(db, collection, commentContent, parent) {
 		updateDatabase(db, collection, ct);
 	});
 
+}
+
+// update comment in the database given the comment id
+function updateComment(db, collection, commentContent, commentId) {
+
+	// retrieve comment tree, update comment
+	collection.find({}, {}, function(err, docs) {
+		ct = new CommentTree(docs[0]);
+
+		ct.updateComment(commentContent, commentId);
+
+		updateDatabase(db, collection, ct);
+	});
 }
 
 // remove comment from the comment tree given the comment id
