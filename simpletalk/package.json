@@ -18,6 +18,7 @@
     "stylus": "*",
     "nib": "*",
     "sanitize-html": "*",
-    "moment": "*"
+    "moment": "*",
+    "entities": "*"
   }
 }
