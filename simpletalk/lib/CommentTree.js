@@ -135,9 +135,8 @@ function checkParent(node, commentContent, parent) {
 		console.log(commentContent);
 		var cleanComment = sanitizeHtml(commentContent);
 
-		node.children.push({ author : "ANON", points : 0, timeCreated : new Date().toISOString(), 
-							 timeLastEdited : new Date().toISOString(), comment : cleanComment, 
-							 children : [], id : new ObjectID()});
+		node.children.push({ author : "ANON", points : 0, timeCreated : new Date().toISOString(),
+							 comment : cleanComment, children : [], id : new ObjectID()});
 	}
 }
 
@@ -267,7 +266,7 @@ function getTimeFromNow(node) {
 function getTimeLastEdited(node) {
 
 	// display time last edited if it differs from time created
-	if (node.timeLastEdited && moment(node.timeLastEdited).fromNow() != moment(node.timeCreated).fromNow())
+	if (node.timeLastEdited/* && moment(node.timeLastEdited).fromNow() != moment(node.timeCreated).fromNow()*/)
 		return "<span class='timeLastEdited'>last edited " + moment(node.timeLastEdited).fromNow() + "</span>";
 	return "<span class='timeLastEdited'></span>";
 }
