@@ -52,9 +52,7 @@ CommentTree.prototype.addIDs = function() {
 	this.structure._id = new ObjectID();
 
 	for (i in tree.bubbles) {
-
-		addID(tree.bubbles[i]);
-
+		
 		traverse(tree.bubbles[i], addID);
 	}
 
@@ -199,6 +197,7 @@ function traverse(node, fn) {
 	}
 }
 
+// for testing purposes
 function printTree(node, indent, treeString) {
 	if (node.bubbleName)
 		treeString.ts += indent + node.bubbleName + "\n";
@@ -215,26 +214,26 @@ function generateTreeStructure(node, treeString) {
 	var elements = new Elements();
 
 	if (node.bubbleName)
-		treeString.ts += elements.getBubblePrefix();
+		treeString.ts += elements.getBubbleItemPrefix();
 	else
-		treeString.ts += elements.getCommentPrefix();
+		treeString.ts += elements.getCommentItemPrefix();
 
 	treeString.ts += elements.getDeleteForm(node);
 
 	if (node.bubbleName)
 		treeString.ts += elements.getCloseBubbleForm();
 
-	treeString.ts += getTimeFromNow(node); // ELEMENTS TODO
+	treeString.ts += elements.getTimestamp(node);
 
 	
 	if (node.bubbleName)
-		treeString.ts += "<div class='bubbleText'>" + node.bubbleName + "</div>"; // ELEMENTS TODO
+		treeString.ts += elements.getBubbleText(node.bubbleName);
 	else
-		treeString.ts += "<div class='commentText'>" + node.comment + "</div>"; // ELEMENTS TODO
+		treeString.ts += elements.getCommentText(node.comment);
 
 	if (!node.bubbleName) {
 		// add last edited time if it differs from time created for comments
-		treeString.ts += getTimeLastEdited(node); // ELEMENTS TODO
+		treeString.ts += elements.getEditTimestamp(node);
 
 		// add edit button form for comments
 		treeString.ts += elements.getEditForm(node);
@@ -258,18 +257,18 @@ function generateTreeStructure(node, treeString) {
 }
 
 // return the time that the node was created relative to now
-function getTimeFromNow(node) {
+/*function getTimeFromNow(node) {
 	return "<span class='timeCreated pull-right'>" + moment(node.timeCreated).fromNow() + "</span>";
-}
+}*/
 
 // return the time last edited
-function getTimeLastEdited(node) {
+/*function getTimeLastEdited(node) {
 
 	// display time last edited if it differs from time created
-	if (node.timeLastEdited/* && moment(node.timeLastEdited).fromNow() != moment(node.timeCreated).fromNow()*/)
+	if (node.timeLastEdited)
 		return "<span class='timeLastEdited'>last edited " + moment(node.timeLastEdited).fromNow() + "</span>";
 	return "<span class='timeLastEdited'></span>";
-}
+}*/
 
 // add in comment id into delete comment form
 /*function getDeleteCommentForm(node) {

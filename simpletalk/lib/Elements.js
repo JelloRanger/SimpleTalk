@@ -5,15 +5,17 @@
 *	HTML elements are accessible and modifiable from this class
 */
 
+var moment = require('moment');
+
 // constructor
 function Elements() {}
 
-Elements.prototype.getBubblePrefix = function() {
-	return BUBBLE_NAME_PREFIX;
+Elements.prototype.getBubbleItemPrefix = function() {
+	return BUBBLE_ITEM_PREFIX;
 }
 
-Elements.prototype.getCommentPrefix = function() {
-	return COMMENT_PREFIX;
+Elements.prototype.getCommentItemPrefix = function() {
+	return COMMENT_ITEM_PREFIX;
 }
 
 Elements.prototype.getItemSuffix = function() {
@@ -26,6 +28,14 @@ Elements.prototype.getGroupPrefix = function() {
 
 Elements.prototype.getGroupSuffix = function() {
 	return GROUP_SUFFIX;
+}
+
+Elements.prototype.getBubbleText = function(str) {
+	return BUBBLE_TEXT_PREFIX + str + BUBBLE_TEXT_SUFFIX;
+}
+
+Elements.prototype.getCommentText = function(str) {
+	return COMMENT_TEXT_PREFIX + str + COMMENT_TEXT_SUFFIX;
 }
 
 // return the reply box along with parent comment id if provided
@@ -50,12 +60,28 @@ Elements.prototype.getEditForm = function(obj) {
 	return EDIT_PREFIX + obj.id + EDIT_SUFFIX;
 }
 
-BUBBLE_NAME_PREFIX = "<li class='list-group-item bubbleItem'>";
-COMMENT_PREFIX = "<li class='list-group-item'>";
+Elements.prototype.getTimestamp = function(obj) {
+	return TIME_PREFIX + moment(obj.timeCreated).fromNow() + TIME_SUFFIX;
+}
+
+Elements.prototype.getEditTimestamp = function(obj) {
+	if (typeof obj === 'undefined' || !obj.timeLastEdited)
+		return EDIT_TIME_PREFIX + EDIT_TIME_SUFFIX;
+	return EDIT_TIME_PREFIX + EDIT_TIME_STRING + moment(obj.timeLastEdited).fromNow() + EDIT_TIME_SUFFIX;
+}
+
+BUBBLE_ITEM_PREFIX = "<li class='list-group-item bubbleItem'>";
+COMMENT_ITEM_PREFIX = "<li class='list-group-item'>";
 ITEM_SUFFIX = "</li>";
 
 GROUP_PREFIX = "<ul class='list-group'>";
 GROUP_SUFFIX = "</ul>";
+
+BUBBLE_TEXT_PREFIX = "<div class='bubbleText'>";
+BUBBLE_TEXT_SUFFIX = "</div>";
+
+COMMENT_TEXT_PREFIX = "<div class='commentText'>";
+COMMENT_TEXT_SUFFIX = "</div>"; 
 
 REPLY_PREFIX = "<form class='addCommentForm' name='addcomment' id='addCommentForm'>" +
 				"<div class='input-group'>" +
@@ -79,14 +105,6 @@ REPLY_FORM = "<form class='addCommentForm' name='addcomment' id='addCommentForm'
 					"</span>" +
 				"</div></form>";
 
-// delete bubble/comment form
-/*DEL_FORM =	"<form class='deleteForm pull-right' name='delcomment'>" +
-				"<input id='commentId' type='hidden' name='commentId'>" +
-				"<button class='btn btn-default btn-xs' type='submit' title='Delete Bubble'>" +
-					"<span class='glyphicon glyphicon-remove'></span>" +
-				"</button>" +
-			"</form>";*/
-
 DEL_PREFIX = "<form class='deleteForm pull-right' name='delcomment'>" +
 				"<input id='commentId' type='hidden' name='commentId' value='";
 
@@ -106,5 +124,12 @@ EDIT_PREFIX = "<form class='editButtonForm' name='editcomment'>" +
 			 	"<button style='display:none' class='btn btn-danger btn-xs cancelEditButton' type='submit' title='Cancel'>cancel</button>" +
 			 	"<input id='commentId' type='hidden' name='commentId' value='";
 EDIT_SUFFIX = "'></form>";
+
+TIME_PREFIX = "<span class='timeCreated pull-right'>";
+TIME_SUFFIX = "</span>";
+
+EDIT_TIME_PREFIX = "<span class='timeLastEdited'>";
+EDIT_TIME_SUFFIX = "</span>";
+EDIT_TIME_STRING = "last edited ";
 
 module.exports = Elements;
