@@ -57,6 +57,11 @@ ul
   display inline-block
   padding 10px 2px
 
+.bubbleText
+  color main-color
+  font-size 2em
+  font-weight bold
+
 .timeCreated
   font-size 80%
   font-style italic
@@ -75,7 +80,12 @@ ul
 
 .footerText
   font-size 80%
-  color #444
+
+.footer
+  background-color main-color
+  font-family 'Quicksand'
+  padding 30px 10px
+  color #fff
 
 .link-icon
   text-decoration none !important
@@ -126,12 +136,19 @@ ul
   width auto
   display inline
 
+.list-group
+  background none
+
 .list-group-item
   -o-transition .5s
   -ms-transition .5s
   -moz-transition .5s
   -webkit-transition .5s
   transition .5s
+
+  border-radius 10px !important
+  margin-bottom 10px !important
+
 
 .list-group-item:hover
   border 1px solid main-color !important
@@ -141,23 +158,30 @@ ul
   -webkit-transition .5s
   transition .5s
 
+.bubbleClosed
+  /*background -webkit-linear-gradient(left top, red , #E1E0D8) !important
+  background -o-linear-gradient(bottom right, red, #E1E0D8) !important
+  background -moz-linear-gradient(bottom right, red, #E1E0D8) !important
+  background linear-gradient(to bottom right, red, #E1E0D8) !important*/
+  background-color black !important
+
 .bubbleClosed:hover
   box-shadow 0px 0px 20px main-color
   cursor pointer
 
-.bubbleClosed:hover + .list-group-item
+/*.bubbleClosed:hover + .list-group-item
   //box-shadow 0px -10px 10px -10px main-color
-  box-shadow inset 0px 20px 20px -20px main-color
+  box-shadow inset 0px 20px 20px -20px main-color*/
 
 // activate top border of next list-group-item when above
 // element is hovered since the borders overlap
-.list-group-item:hover + .list-group-item
+/*.list-group-item:hover + .list-group-item
   border-top 1px solid main-color !important
   -o-transition .5s
   -ms-transition .5s
   -moz-transition .5s
   -webkit-transition .5s
-  transition .5s
+  transition .5s*/
 
 .list-group-item
 

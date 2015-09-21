@@ -137,6 +137,11 @@ ul {
   display: inline-block;
   padding: 10px 2px;
 }
+.bubbleText {
+  color: #fa5b4d;
+  font-size: 2em;
+  font-weight: bold;
+}
 .timeCreated {
   font-size: 80%;
   font-style: italic;
@@ -155,7 +160,12 @@ ul {
 }
 .footerText {
   font-size: 80%;
-  color: #444;
+}
+.footer {
+  background-color: #fa5b4d;
+  font-family: 'Quicksand';
+  padding: 30px 10px;
+  color: #fff;
 }
 .link-icon {
   text-decoration: none !important;
@@ -209,6 +219,9 @@ ul {
   width: auto;
   display: inline;
 }
+.list-group {
+  background: none;
+}
 .list-group-item {
   -o-transition: 0.5s;
   -ms-transition: 0.5s;
@@ -219,6 +232,9 @@ ul {
   -o-transition: 0.5s;
   -ms-transition: 0.5s;
   transition: 0.5s;
+  -webkit-border-radius: 10px !important;
+  border-radius: 10px !important;
+  margin-bottom: 10px !important;
 }
 .list-group-item:hover {
   border: 1px solid #fa5b4d !important;
@@ -232,27 +248,28 @@ ul {
   -ms-transition: 0.5s;
   transition: 0.5s;
 }
+.bubbleClosed {
+/*background -webkit-linear-gradient(left top, red , #E1E0D8) !important
+  background -o-linear-gradient(bottom right, red, #E1E0D8) !important
+  background -moz-linear-gradient(bottom right, red, #E1E0D8) !important
+  background linear-gradient(to bottom right, red, #E1E0D8) !important*/
+  background-color: #000 !important;
+}
 .bubbleClosed:hover {
   -webkit-box-shadow: 0px 0px 20px #fa5b4d;
   box-shadow: 0px 0px 20px #fa5b4d;
   cursor: pointer;
 }
-.bubbleClosed:hover + .list-group-item {
-  -webkit-box-shadow: inset 0px 20px 20px -20px #fa5b4d;
-  box-shadow: inset 0px 20px 20px -20px #fa5b4d;
-}
-.list-group-item:hover + .list-group-item {
-  border-top: 1px solid #fa5b4d !important;
-  -o-transition: 0.5s;
-  -ms-transition: 0.5s;
-  -moz-transition: 0.5s;
-  -webkit-transition: 0.5s;
-  -webkit-transition: 0.5s;
-  -moz-transition: 0.5s;
-  -o-transition: 0.5s;
-  -ms-transition: 0.5s;
-  transition: 0.5s;
-}
+/*.bubbleClosed:hover + .list-group-item
+  //box-shadow 0px -10px 10px -10px main-color
+  box-shadow inset 0px 20px 20px -20px main-color*/
+/*.list-group-item:hover + .list-group-item
+  border-top 1px solid main-color !important
+  -o-transition .5s
+  -ms-transition .5s
+  -moz-transition .5s
+  -webkit-transition .5s
+  transition .5s*/
 .list-group-item {
 /*padding-left 25px !important
   padding-right 5px !important
