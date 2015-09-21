@@ -24,9 +24,6 @@ router.get('/', function(req, res, next) {
 
 // handle add comment call
 router.post('/addcomment', function(req, res) {
-	
-	// DEBUG
-	//console.log('body: ' + JSON.stringify(req.body));
 
 	var db = req.db;
 	var collection = db.get('comments');
@@ -96,15 +93,11 @@ router.post('/delcomment', function(req, res) {
 	res.redirect('/');
 });
 
-// update the database given a new comment tree structure
-// NOTE: Right now this is done by deleting the tree structure
-// in the database, and then inserting the updated version.
-// Obviously, this is a very bad way of doing things. Moving forward,
-// I plan to switch to a different, more powerful library for interfacing
-// with MongoDB, so database functionality such as save() is available.
+// update the database given an updated comment tree structure
 function updateDatabase(db, collection, ct) {
-	collection.remove({});
-	collection.insert(ct.getStructure());
+	var structure = ct.getStructure();
+	collection.update({ _id : structure._id}, structure);
+
 }
 
 // add bubble to the comment tree
