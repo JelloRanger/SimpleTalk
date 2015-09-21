@@ -269,7 +269,7 @@ function getTimeLastEdited(node) {
 	// display time last edited if it differs from time created
 	if (node.timeLastEdited && moment(node.timeLastEdited).fromNow() != moment(node.timeCreated).fromNow())
 		return "<span class='timeLastEdited'>last edited " + moment(node.timeLastEdited).fromNow() + "</span>";
-	return "";
+	return "<span class='timeLastEdited'></span>";
 }
 
 // add in comment id into delete comment form

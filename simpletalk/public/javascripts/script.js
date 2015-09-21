@@ -107,6 +107,9 @@ $(document).ready(function() {
 						// thus, we can simply update the comment on the page without a refresh
 						if (revisedCommentText.val().length == checkForHTML.length) {
 							commentTextElement.text(revisedCommentText.val());
+
+							// display 'last edited a few seconds ago' to let user know the edit went through
+							commentTextElement.siblings('.timeLastEdited').text("last edited a few seconds ago");
 						}
 
 						// otherwise, refresh the page, so we can display the sanitized HTML
