@@ -10,12 +10,12 @@ var moment = require('moment');
 // constructor
 function Elements() {}
 
-Elements.prototype.getBubbleItemPrefix = function() {
-	return BUBBLE_ITEM_PREFIX;
+Elements.prototype.getBubbleItemPrefix = function(node) {
+	return BUBBLE_ITEM_PREFIX + node.id + END_TAG;
 }
 
-Elements.prototype.getCommentItemPrefix = function() {
-	return COMMENT_ITEM_PREFIX;
+Elements.prototype.getCommentItemPrefix = function(node) {
+	return COMMENT_ITEM_PREFIX + node.id + END_TAG;
 }
 
 Elements.prototype.getItemSuffix = function() {
@@ -60,6 +60,11 @@ Elements.prototype.getEditForm = function(obj) {
 	return EDIT_PREFIX + obj.id + EDIT_SUFFIX;
 }
 
+// return the share button along with its respective comment id
+Elements.prototype.getShareButton = function(obj) {
+	return SHARE_PREFIX + obj.id + SHARE_SUFFIX;
+}
+
 Elements.prototype.getTimestamp = function(obj) {
 	return TIME_PREFIX + moment(obj.timeCreated).fromNow() + TIME_SUFFIX;
 }
@@ -70,8 +75,10 @@ Elements.prototype.getEditTimestamp = function(obj) {
 	return EDIT_TIME_PREFIX + EDIT_TIME_STRING + moment(obj.timeLastEdited).fromNow() + EDIT_TIME_SUFFIX;
 }
 
-BUBBLE_ITEM_PREFIX = "<li class='list-group-item bubbleItem'>";
-COMMENT_ITEM_PREFIX = "<li class='list-group-item'>";
+END_TAG = "'>";
+
+BUBBLE_ITEM_PREFIX = "<li class='list-group-item bubbleItem' id='";
+COMMENT_ITEM_PREFIX = "<li class='list-group-item' id='";
 ITEM_SUFFIX = "</li>";
 
 GROUP_PREFIX = "<ul class='list-group'>";
@@ -121,9 +128,12 @@ CLOSE_BUBBLE_FORM = "<div class='pull-right'><button class='btn btn-default btn-
 // edit button
 EDIT_PREFIX = "<form class='editButtonForm' name='editcomment'>" +
 				"<button class='btn btn-danger btn-xs editButton' type='submit' title='Edit'>edit</button> " +
-			 	"<button style='display:none' class='btn btn-danger btn-xs cancelEditButton' type='submit' title='Cancel'>cancel</button>" +
+			 	"<button style='display:none' class='btn btn-danger btn-xs cancelEditButton' type='submit' title='Cancel'>cancel</button> " +
 			 	"<input id='commentId' type='hidden' name='commentId' value='";
 EDIT_SUFFIX = "'></form>";
+
+SHARE_PREFIX = "<a class='btn btn-danger btn-xs shareButton' href='?commentId=";
+SHARE_SUFFIX = "'>share</a>"
 
 TIME_PREFIX = "<span class='timeCreated pull-right'>";
 TIME_SUFFIX = "</span>";

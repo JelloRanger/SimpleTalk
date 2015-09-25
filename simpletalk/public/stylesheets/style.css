@@ -201,6 +201,18 @@ ul {
 .input-group-btn {
   vertical-align: top !important;
 }
+.editButtonForm {
+  display: inline;
+}
+.editButton {
+  display: inline;
+}
+.cancelEditButton {
+  display: inline;
+}
+.shareButton {
+  display: inline;
+}
 .addCommentForm {
   margin-top: 20px;
   margin-bottom: 20px;
@@ -217,7 +229,6 @@ ul {
   white-space: -o-pre-wrap;
   word-wrap: break-word;
   width: auto;
-  display: inline;
 }
 .list-group {
   background: none;

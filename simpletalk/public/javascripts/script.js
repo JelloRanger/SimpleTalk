@@ -6,6 +6,31 @@ $(document).ready(function() {
 	if (!displayed_class)
 		$('.bubbleItem').children().hide();*/
 
+	// grab the commentID if provided
+	var commentID = getUrlParameter('commentId');
+
+	// scroll to the comment specified by its id if available
+	if (commentID && $("#" + commentID).length > 0) {
+		$('html, body').animate({
+			scrollTop: $("#" + commentID).offset().top
+		}, 0);
+	}
+
+	// grab comment ID from url parameter
+	function getUrlParameter(paramName) {
+		var url = decodeURIComponent(window.location.search.substring(1)),
+				  URLVars = url.split('&'),
+				  param,
+				  i;
+
+		for (i = 0; i < URLVars.length; i++) {
+			param = URLVars[i].split('=');
+
+			if (param[0] === paramName)
+				return param[1] === undefined ? true : param[1];
+		}
+	}
+
 	// expand the text input field to a textarea and vice versa
 	$('.expandButton').click(function() {
 

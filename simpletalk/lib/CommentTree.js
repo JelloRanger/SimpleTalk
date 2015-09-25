@@ -214,9 +214,9 @@ function generateTreeStructure(node, treeString) {
 	var elements = new Elements();
 
 	if (node.bubbleName)
-		treeString.ts += elements.getBubbleItemPrefix();
+		treeString.ts += elements.getBubbleItemPrefix(node);
 	else
-		treeString.ts += elements.getCommentItemPrefix();
+		treeString.ts += elements.getCommentItemPrefix(node);
 
 	treeString.ts += elements.getDeleteForm(node);
 
@@ -238,6 +238,9 @@ function generateTreeStructure(node, treeString) {
 		// add edit button form for comments
 		treeString.ts += elements.getEditForm(node);
 	}
+
+	// add share button
+	treeString.ts += elements.getShareButton(node);
 
 	// add reply form
 	treeString.ts += elements.getReplyForm(node);
