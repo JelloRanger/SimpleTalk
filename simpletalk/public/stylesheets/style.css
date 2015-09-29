@@ -196,26 +196,31 @@ ul {
 .fa-4x {
   font-size: 6em !important;
 }
-/*.list-group-item
-  margin-bottom 1px !important*/
 .input-group-btn {
   vertical-align: top !important;
 }
-.editButtonForm {
-  display: inline;
-}
-.editButton {
-  display: inline;
-}
-.cancelEditButton {
-  display: inline;
-}
+.editButtonForm,
+.editButton,
+.cancelEditButton,
 .shareButton {
   display: inline;
+  margin-bottom: 10px !important;
 }
+/*.editButtonForm
+  display inline
+
+.editButton
+  display inline
+
+.cancelEditButton
+  display inline
+
+.shareButton
+  display inline
+  margin-bottom 10px !important*/
 .addCommentForm {
-  margin-top: 20px;
-  margin-bottom: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
   width: 100%;
 }
 .multiLine {
@@ -227,7 +232,11 @@ ul {
   white-space: -moz-pre-wrap;
   white-space: -pre-wrap;
   white-space: -o-pre-wrap;
+  overflow-wrap: break-word;
   word-wrap: break-word;
+  -ms-word-break: break-all;
+  word-break: break-all;
+  word-break: break-word;
   width: auto;
 }
 .list-group {
@@ -259,28 +268,11 @@ ul {
   -ms-transition: 0.5s;
   transition: 0.5s;
 }
-.bubbleClosed {
-/*background -webkit-linear-gradient(left top, red , #E1E0D8) !important
-  background -o-linear-gradient(bottom right, red, #E1E0D8) !important
-  background -moz-linear-gradient(bottom right, red, #E1E0D8) !important
-  background linear-gradient(to bottom right, red, #E1E0D8) !important*/
-  background-color: #000 !important;
-}
 .bubbleClosed:hover {
   -webkit-box-shadow: 0px 0px 20px #fa5b4d;
   box-shadow: 0px 0px 20px #fa5b4d;
   cursor: pointer;
 }
-/*.bubbleClosed:hover + .list-group-item
-  //box-shadow 0px -10px 10px -10px main-color
-  box-shadow inset 0px 20px 20px -20px main-color*/
-/*.list-group-item:hover + .list-group-item
-  border-top 1px solid main-color !important
-  -o-transition .5s
-  -ms-transition .5s
-  -moz-transition .5s
-  -webkit-transition .5s
-  transition .5s*/
 .list-group-item {
 /*padding-left 25px !important
   padding-right 5px !important

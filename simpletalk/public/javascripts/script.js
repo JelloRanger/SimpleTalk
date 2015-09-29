@@ -6,6 +6,8 @@ $(document).ready(function() {
 	if (!displayed_class)
 		$('.bubbleItem').children().hide();*/
 
+	$('.bubbleClosed').children(':not(.bubbleText)').hide();
+
 	// grab the commentID if provided
 	var commentID = getUrlParameter('commentId');
 
@@ -169,21 +171,6 @@ $(document).ready(function() {
 		$(this).hide();
 	});
 
-	function isScrolledIntoView(elem)
-	{
-	    var $elem = $(elem);
-	    var $window = $(window);
-
-	    var docViewTop = $window.scrollTop();
-	    var docViewBottom = docViewTop + $window.height();
-
-	    var elemTop = $elem.offset().top;
-	    var elemBottom = elemTop + $elem.height();
-
-	    return ((( elemTop >= docViewTop) && (elemTop <= docViewBottom)) || 
-	    		((elemBottom >= docViewTop) && (elemBottom <= docViewBottom)));
-	}
-
 	// submit an ajax post request for adding a comment/bubble
 	$('.addCommentForm').submit(function(e) {
 
@@ -192,35 +179,14 @@ $(document).ready(function() {
 
 		var commentElem = $(this).parent();
 
-		// keep track of the position of the parent comment
-		var parentPos = $(this).parent().parent().offset().top;
-
 		$.ajax({
 			type: "POST",
 			url: "/addcomment",
 			data: $(this).serialize(),
 			success: function(data) {
 
-				// if new comment would appear outside of current viewport, move scrollbar
-				// to location of the new comment
-				// TODO: Currently only works if new comment is ABOVE viewport, not below
-				//if (!(((parentvar + $(parentvar).height()) <= $(window).scrollTop() + $(window).height()) &&
-					//($(parentvar).offset().top >= $(window).scrollTop()))) {
-				/*if (!isScrolledIntoView(commentElem)) {
-					$('html, body').animate({
-						scrollTop: commentElem.offset().top
-					}, 0, function() {
-						window.location = window.location.pathname;
-						//window.location.reload();
-					});
-				}
-
-				// otherwise just refresh the page since the new comment is in the viewport
-				else {
-					window.location = window.location.pathname;
-					//window.location.reload();
-				}*/
-
+				// if a comment is added, link the parent bubble/comment
+				// otherwise, simply refresh to the homepage
 				var urlComment = window.location.pathname;
 				if (!($(commentElem).attr('id') === undefined)) {
 					console.log("werehere");
@@ -263,6 +229,60 @@ $(document).ready(function() {
 			},
 			error: function(e) {
 				alert("error");
+			}
+		});
+	});
+
+	// submit ajax post request for logging out
+	$('#logoutButton').click(function(e) {
+		e.preventDefault();
+
+		$.ajax({
+			type: "POST",
+			url: "/logout",
+			success: function(data) {
+				window.location.reload();
+			},
+			error: function(e) {
+				alert("unable to logout");
+			}
+		});
+	});
+
+	// submit ajax post request for logging in
+	$('#loginForm').submit(function(e) {
+		e.preventDefault();
+
+		$.ajax({
+			type: "POST",
+			url: "/login",
+			data: $(this).serialize(),
+			success: function(data) {
+				window.location.reload();
+			},
+			error: function(e) {
+				alert("Incorrect username/password.");
+			}
+		});
+
+	});
+
+	// submit ajax post request for registering
+	$('#registerForm').submit(function(e) {
+		e.preventDefault();
+
+		$.ajax({
+			type: "POST",
+			url: "/register",
+			data: $(this).serialize(),
+			success: function(data) {
+				if (data.error)
+					alert(data.error)
+				else
+					window.location.reload();
+			},
+			error: function(e) {
+				alert("this should never happen");
 			}
 		});
 	});

@@ -3,6 +3,7 @@ var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var stylus = require('stylus');
 var nib = require('nib');
@@ -33,6 +34,11 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(session({
+  secret: 'hehehe',
+  resave: true,
+  saveUninitialized: true
+}));
 app.use(stylus.middleware(
 {
   src: __dirname + '/public',

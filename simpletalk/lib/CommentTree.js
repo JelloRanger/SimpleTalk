@@ -17,7 +17,7 @@ function CommentTree(properties) {
 }
 
 // display the comments
-CommentTree.prototype.displayComments = function() {
+CommentTree.prototype.displayComments = function(user) {
 
 	var tree = this.structure;
 	var treeString = { ts: '' };
@@ -34,7 +34,7 @@ CommentTree.prototype.displayComments = function() {
 		for (i in tree.bubbles) {
 
 			// traverse all comment nodes
-			generateTreeStructure(tree.bubbles[i], treeString);
+			generateTreeStructure(tree.bubbles[i], treeString, user);
 		}
 	}
 
@@ -83,13 +83,13 @@ CommentTree.prototype.addBubble = function(bubbleN) {
 }
 
 // add comment to the comment tree given its parent
-CommentTree.prototype.addComment = function(commentContent, parent) {
+CommentTree.prototype.addComment = function(commentContent, parent, user) {
 
 	var tree = this.structure;
 
 	for (i in tree.bubbles) {
 
-		traverseAdd(tree.bubbles[i], checkParent, commentContent, parent);
+		traverseAdd(tree.bubbles[i], checkParent, commentContent, parent, user);
 	}
 }
 
@@ -124,7 +124,7 @@ CommentTree.prototype.removeComment = function(commentId) {
 }
 
 // add comment if the parent matches
-function checkParent(node, commentContent, parent) {
+function checkParent(node, commentContent, parent, user) {
 	
 	// if node matches parent id, add the comment to children
 	if (node.id == parent) {
@@ -133,7 +133,7 @@ function checkParent(node, commentContent, parent) {
 		console.log(commentContent);
 		var cleanComment = sanitizeHtml(commentContent);
 
-		node.children.push({ author : "ANON", points : 0, timeCreated : new Date().toISOString(),
+		node.children.push({ author : user, points : 0, timeCreated : new Date().toISOString(),
 							 comment : cleanComment, children : [], id : new ObjectID()});
 	}
 }
@@ -144,11 +144,11 @@ function addID(node) {
 }
 
 // traverse nodes, applying the function and args provided
-function traverseAdd(node, fn, commentContent, parent) {
-	fn(node, commentContent, parent);
+function traverseAdd(node, fn, commentContent, parent, user) {
+	fn(node, commentContent, parent, user);
 
 	for (i in node.children) {
-		traverseAdd(node.children[i], fn, commentContent, parent);
+		traverseAdd(node.children[i], fn, commentContent, parent, user);
 	}
 }
 
@@ -209,16 +209,18 @@ function printTree(node, indent, treeString) {
 }
 
 // generate the tree structure in html
-function generateTreeStructure(node, treeString) {
+function generateTreeStructure(node, treeString, user) {
 
 	var elements = new Elements();
 
 	if (node.bubbleName)
-		treeString.ts += elements.getBubbleItemPrefix(node);
+		treeString.ts += elements.getBubbleItemPrefix(node, false);
 	else
 		treeString.ts += elements.getCommentItemPrefix(node);
 
-	treeString.ts += elements.getDeleteForm(node);
+	// add delete button if the user authored the comment or user is admin
+	if (user == "admin" || (node.author && node.author == user))
+		treeString.ts += elements.getDeleteForm(node);
 
 	if (node.bubbleName)
 		treeString.ts += elements.getCloseBubbleForm();
@@ -235,15 +237,17 @@ function generateTreeStructure(node, treeString) {
 		// add last edited time if it differs from time created for comments
 		treeString.ts += elements.getEditTimestamp(node);
 
-		// add edit button form for comments
-		treeString.ts += elements.getEditForm(node);
+		// add edit button form for comments if the user authored it
+		if (node.author == user)
+			treeString.ts += elements.getEditForm(node);
 	}
 
 	// add share button
 	treeString.ts += elements.getShareButton(node);
 
-	// add reply form
-	treeString.ts += elements.getReplyForm(node);
+	// add reply form if user is logged in
+	if (user)
+		treeString.ts += elements.getReplyForm(node);
 
 	treeString.ts += elements.getGroupPrefix();
 
@@ -251,7 +255,7 @@ function generateTreeStructure(node, treeString) {
 	node.children.sort(sort_by('timeCreated', true, moment));
 
 	for (var i = 0; i < node.children.length; i++) {
-		generateTreeStructure(node.children[i], treeString);
+		generateTreeStructure(node.children[i], treeString, user);
 	}
 
 	treeString.ts += elements.getGroupSuffix();

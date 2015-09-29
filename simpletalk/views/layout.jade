@@ -7,6 +7,7 @@ html
 		link(rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css')
 		link(rel="icon", href="/images/favicon.ico", type="image/x-icon")
 		script(src='https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js')
+		script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js')
 		script(src='/javascripts/script.js')
 			
 	body
@@ -20,6 +21,44 @@ html
 		header
 			h1 SimpleTalk
 			h6 Talking Simply.
+			span.btn-toolbar.pull-right
+				button.btn.btn-danger.btn-lg(type='button' data-toggle='modal' data-target='#loginModal') log in
+				button.btn.btn-danger.btn-lg#logoutButton(type='button' title='Logout') log out
+				button.btn.btn-danger.btn-lg(type='button' data-toggle='modal' data-target='#registerModal') register
+		
+		// login modal
+		div.modal.fade#loginModal(role='dialog')
+			div.modal-dialog
+				div.modal-content
+					div.modal-header
+						button.close(type='button' data-dismiss='modal') &times;
+						h4.modal-title Login
+					
+					form#loginForm(name='login')
+						div.modal-body
+							input.form-control(required id='loginUser' type='text' placeholder='Username' name='loginUser')
+							input.form-control(required id='loginPass' type='password' placeholder='Password' name='loginPass')
+						div.modal-footer
+							button.btn.btn-danger#loginSubmit(type='submit' title='Login') login
+							button.btn.btn-danger(type='button' data-dismiss='modal') cancel
+
+		// register modal
+		div.modal.fade#registerModal(role='dialog')
+			div.modal-dialog
+				div.modal-content
+					div.modal-header
+						button.close(type='button' data-dismiss='modal') &times;
+						h4.modal-title Register
+
+					form#registerForm(name='register')
+						div.modal-body
+							input.form-control(required id='registerUser' type='text' placeholder='Username' name='registerUser')
+							input.form-control(required id='registerPass' type='password' placeholder='Password' name='registerPass')
+							input.form-control(required id='registerConfirmPass' type='password' placeholder='Confirm Password' name='registerConfirmPass')
+						div.modal-footer
+							button.btn.btn.btn-danger#registerSubmit(type='submit' title='Register') register
+							button.btn.btn-danger(type='button' data-dismiss='modal') cancel
+
 
 		// main content
 		.container
