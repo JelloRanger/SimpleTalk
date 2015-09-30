@@ -6,7 +6,11 @@ $(document).ready(function() {
 			if (sessionStorage.getItem($(this).attr('id')) == 'closed') {
 				$(this).addClass('bubbleClosed');
 			}
-			$(this).children(':not(.bubbleText)').hide();
+			else if (sessionStorage.getItem($(this).attr('id')) == 'open') {
+				$(this).removeClass('bubbleClosed');
+			}
+			if ($(this).hasClass('bubbleClosed'))
+				$(this).children(':not(.bubbleText)').hide();
 		});
 	}
 
