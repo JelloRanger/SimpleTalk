@@ -214,7 +214,7 @@ function generateTreeStructure(node, treeString, user) {
 	var elements = new Elements();
 
 	if (node.bubbleName)
-		treeString.ts += elements.getBubbleItemPrefix(node, false);
+		treeString.ts += elements.getBubbleItemPrefix(node);
 	else
 		treeString.ts += elements.getCommentItemPrefix(node);
 

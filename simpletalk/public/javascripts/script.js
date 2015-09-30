@@ -1,12 +1,15 @@
 $(document).ready(function() {
 
-	// hide all bubble contents on page load
-	/*var displayed_class = $.cookie('displayedClass');
-	alert(displayed_class);
-	if (!displayed_class)
-		$('.bubbleItem').children().hide();*/
+	// remember what bubbles are open and minimized for a user's session
+	if (sessionStorage) {
+		$('.bubbleItem').each(function() {
+			if (sessionStorage.getItem($(this).attr('id')) == 'closed') {
+				$(this).addClass('bubbleClosed');
+			}
+			$(this).children(':not(.bubbleText)').hide();
+		});
+	}
 
-	$('.bubbleClosed').children(':not(.bubbleText)').hide();
 
 	// grab the commentID if provided
 	var commentID = getUrlParameter('commentId');
@@ -73,6 +76,9 @@ $(document).ready(function() {
 	$('.bubbleItem').click(function() {
 		$(this).removeClass('bubbleClosed');
 		$(this).children().slideDown();
+
+		// session should remember that this particular bubble is open
+		sessionStorage.setItem($(this).attr('id'), 'open');
 	});
 
 	// close bubble on button click
@@ -80,6 +86,9 @@ $(document).ready(function() {
 		e.stopImmediatePropagation();
 		$(this).parent().parent().children(':not(.bubbleText)').slideUp();
 		$(this).parent().parent().addClass('bubbleClosed');
+
+		// session should remember that this particular bubble is minimized
+		sessionStorage.setItem($(this).parent().parent().attr('id'), 'closed');
 	});
 
 	// edit comment

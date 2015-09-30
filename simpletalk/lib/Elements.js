@@ -77,7 +77,7 @@ Elements.prototype.getEditTimestamp = function(obj) {
 
 END_TAG = "'>";
 
-BUBBLE_ITEM_PREFIX = "<li class='list-group-item bubbleItem' id='";
+BUBBLE_ITEM_PREFIX = "<li class='list-group-item bubbleItem bubbleClosed' id='";
 COMMENT_ITEM_PREFIX = "<li class='list-group-item' id='";
 ITEM_SUFFIX = "</li>";
 

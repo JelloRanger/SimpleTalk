@@ -11,9 +11,9 @@ router.get('/', function(req, res, next) {
   	var collection = db.get('comments');
 
   	if (req.session.username) {
-  		console.log("logged in as: " + req.session.username);
+  		console.log(req.session.username + " has logged in.");
   	} else {
-  		console.log("not logged in");
+  		console.log("An anonymous user has connected.");
   	}
 
 	collection.find({}, {}, function(err, docs) {		
@@ -28,68 +28,8 @@ router.get('/', function(req, res, next) {
 
 });
 
-// handle user login
-/*router.post('/login', function(req, res) {
-
-	var db = req.db;
-	var collection = db.get('users');
-
-	// grab username and password
-	var username = req.body.loginUser;
-	var password = req.body.loginPass;
-
-	// DEBUG
-	console.log("username: " + username);
-	console.log("password: " + password);
-
-	res.send();
-});*/
-
-// handle user registration
-/*router.post('/register', function(req, res, next) {
-
-	var db = req.db;
-	var collection = db.get('users');
-
-	var username = req.body.registerUser;
-	var password = req.body.registerPass;
-	var confirmPassword = req.body.registerConfirmPass;
-
-	console.log("username: " + username);
-	console.log("password: " + password);
-	console.log("confirm password: " + confirmPassword);
-
-	// make sure passwords match
-	if (password != confirmPassword) {
-		//next.status(500);
-		//return next({errorMsg: "Passwords don't match."});
-		//var error = new Error("Passwords don't match");
-		//error.status = 500;
-		//return next(new Error("Passwords don't match."));
-		//return next(error);
-		res.write("Passwords don't match.");
-	} else {
-
-		// check if username already exists in database
-		collection.findOne({user: username}, function(err, docs) {
-			
-			// username already exists, send error
-			if (docs != null) {
-				res.write("Username already exists");
-			} else {
-
-				// otherwise, insert username into database
-				collection.insert({user: username, pass: password});
-
-				res.write("success");
-			}
-		});
-	}	
-
-	res.send();
-});*/
-
 router.post('/logout', function(req, res) {
+	console.log(req.session.username + " has logged out.");
 	delete req.session.username;
 	res.send();
 });
