@@ -20,6 +20,14 @@ $(document).ready(function() {
 
 	// scroll to the comment specified by its id if available
 	if (commentID && $("#" + commentID).length > 0) {
+
+		// if bubble that comment is in is closed, open bubble before scrolling to comment
+		var enclosingBubble = $("#" + commentID).closest('.bubbleItem');
+		if (enclosingBubble.hasClass('bubbleClosed')) {
+			enclosingBubble.removeClass('bubbleClosed');
+			enclosingBubble.children(':not(.bubbleText)').show();
+		}
+
 		$('html, body').animate({
 			scrollTop: $("#" + commentID).offset().top
 		}, 0);
@@ -95,6 +103,25 @@ $(document).ready(function() {
 		sessionStorage.setItem($(this).parent().parent().attr('id'), 'closed');
 	});
 
+	// pin bubble on button click
+	$('.pinBubble').click(function(e) {
+		e.stopImmediatePropagation();
+		
+		var bubbleId = $(this).parent().parent().attr('id');
+
+		// send ajax post request to server asking to pin bubble for the user
+		$.ajax({
+			type: "POST",
+			url: "/pinbubble",
+			data: { 'bubbleId': bubbleId },
+			success: function() {
+
+			},
+			error: function() {
+
+			}
+		});
+	});
 	// edit comment
 	$('.editButton').click(function(e) {
 		e.preventDefault();

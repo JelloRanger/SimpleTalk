@@ -55,6 +55,11 @@ Elements.prototype.getCloseBubbleForm = function() {
 	return CLOSE_BUBBLE_FORM;
 }
 
+// return the pin bubble form/button
+Elements.prototype.getPinBubbleForm = function() {
+	return PIN_BUBBLE_FORM;
+}
+
 // return the edit form/button along with its respective comment id
 Elements.prototype.getEditForm = function(obj) {
 	return EDIT_PREFIX + obj.id + EDIT_SUFFIX;
@@ -124,6 +129,10 @@ DEL_SUFFIX = "'>" +
 CLOSE_BUBBLE_FORM = "<div class='pull-right'><button class='btn btn-default btn-xs closeBubble' type='submit' title='Close Bubble'>" +
 					"<span class='glyphicon glyphicon-minus'></span>" +
 				  "</button></div>";
+
+// pin bubble form
+PIN_BUBBLE_FORM = "<div class='pull-right'><button class='btn btn-default btn-xs pinBubble' type='submit' title='Pin Bubble'>" +
+					"<span class='glyphicon glyphicon-pushpin'></span></button></div>";
 
 // edit button
 EDIT_PREFIX = "<form class='editButtonForm' name='editcomment'>" +

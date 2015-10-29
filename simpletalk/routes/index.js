@@ -83,7 +83,7 @@ function createUser(collection, username, password, confirmPass, callback) {
 				callback(err);
 			} else {
 
-				collection.insert({user: username, pass: password}, function(err, user) {
+				collection.insert({user: username, pass: password, bubbleId: []}, function(err, user) {
 					callback(err, user);
 				});
 			}
@@ -190,6 +190,27 @@ router.post('/delcomment', function(req, res) {
 	removeComment(db, collection, commentId);
 
 	res.redirect('/');
+});
+
+// handle pin bubble call
+router.post('/pinbubble', function(req, res) {
+
+	var db = req.db;
+	var commentCollection = db.get('comments');
+	var userCollection = db.get('users');
+
+	var bubbleId = req.body.bubbleId;
+
+	if (req.session.username) {
+
+		// DEBUG
+		console.log(req.session.username + " has requested to pin bubble " +  bubbleId);
+
+		// add bubble ID to list of pinned bubbles for the user (if it's not already there)
+		userCollection.update({user: req.session.username}, { $addToSet: { bubbleId: bubbleId }});
+	}
+
+	res.send();
 });
 
 // update the database given an updated comment tree structure

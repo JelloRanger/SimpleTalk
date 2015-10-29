@@ -2,7 +2,7 @@
 *	Author: Jacob Abramson
 *	Date: 8/3/2015
 *
-*	An implementation of a comment tree with multiple children per node
+*	An implementation of a (comment) tree with an arbitrary number of children per node
 */
 
 // modules
@@ -11,30 +11,35 @@ var moment = require('moment');
 var sanitizeHtml = require('sanitize-html');
 var Elements = require('./Elements.js');
 
-// constructor
+// initialize CommentTree with JSON structure
 function CommentTree(properties) {
 	this.structure = properties;
 }
 
-// display the comments
+// return JSON structure of the comment tree
+CommentTree.prototype.getStructure = function() {
+
+	return this.structure;
+}
+
+// Display the comments with HTML markup
 CommentTree.prototype.displayComments = function(user) {
 
-	var tree = this.structure;
 	var treeString = { ts: '' };
 	var elements = new Elements();
 
 	treeString.ts += elements.getGroupPrefix();
 
-	if (tree) {
+	if (this.structure) {
 
 		// sort bubbles by time created
-		tree.bubbles.sort(sort_by('timeCreated', true, moment));
+		this.structure.bubbles.sort(sort_by('timeCreated', true, moment));
 
 		// iterate through each bubble
-		for (i in tree.bubbles) {
+		for (i in this.structure.bubbles) {
 
 			// traverse all comment nodes
-			generateTreeStructure(tree.bubbles[i], treeString, user);
+			generateTreeStructure(this.structure.bubbles[i], treeString, user);
 		}
 	}
 
@@ -44,111 +49,70 @@ CommentTree.prototype.displayComments = function(user) {
 	return treeString.ts;
 }
 
-// create new IDs for all comments/bubbles
-CommentTree.prototype.addIDs = function() {
-
-	var tree = this.structure;
-
-	this.structure._id = new ObjectID();
-
-	for (i in tree.bubbles) {
-		
-		traverse(tree.bubbles[i], addID);
-	}
-
-}
-
-// return JSON structure of the comment tree
-CommentTree.prototype.getStructure = function() {
-
-	return this.structure;
-}
-
 // add bubble to the comment tree
 CommentTree.prototype.addBubble = function(bubbleN) {
 
-	// if tree isn't created, create one TODO: FIX BUBBLE DELETE DB ISSUE
-	if (!this.structure) {
-		console.log("Creating tree...");
-		console.log("THIS SHOULD NEVER HAPPEN");
-		this.structure = { bubbles: [] };
-	}
-
 	var tree = this.structure;
 
-	// sanitize bubble name
+	// sanitize bubble name to get rid of all HTML markup in the bubble name
 	var cleanBubbleName = sanitizeHtml(bubbleN,  { allowedTags: [] });
 
-	tree.bubbles.push({ bubbleName : cleanBubbleName, points : 0, timeCreated : new Date().toISOString(), children : [], id : new ObjectID()});
+	// push JSON bubble object to our list of bubbles
+	tree.bubbles.push({ 
+		bubbleName : cleanBubbleName, 
+		points : 0, 
+		timeCreated : new Date().toISOString(), 
+		children : [], 
+		id : new ObjectID()
+	});
 }
 
-// add comment to the comment tree given its parent
+// add comment to the comment tree given its parent comment id
 CommentTree.prototype.addComment = function(commentContent, parent, user) {
 
-	var tree = this.structure;
+	for (i in this.structure.bubbles) {
 
-	for (i in tree.bubbles) {
-
-		traverseAdd(tree.bubbles[i], checkParent, commentContent, parent, user);
+		traverseComments(this.structure.bubbles[i], insertComment, commentContent, parent, user);
 	}
 }
 
-// update comment from the comment tree given its id
-CommentTree.prototype.updateComment = function(commentContent, commentId) {
-
-	var tree = this.structure;
-
-	for (i in tree.bubbles) {
-
-		traverseUpdate(tree.bubbles[i], commentContent, commentId);
-	}
-}
-
-// remove comment from the comment tree given its id
-CommentTree.prototype.removeComment = function(commentId) {
-
-	var tree = this.structure;
-
-	for (i in tree.bubbles) {
-
-		// check if bubble id matches, if so delete
-		if (tree.bubbles[i].id == commentId) {
-			console.log("Deleting bubble...");
-			delete tree.bubbles.splice(i, 1);
-			break;
-		}
-
-		// recurse further into comment tree
-		traverseRemove(tree.bubbles[i], commentId);
-	}
-}
-
-// add comment if the parent matches
-function checkParent(node, commentContent, parent, user) {
+// traverse comment nodes until parent id found, then insert comment
+function traverseComments(node, insert, commentContent, parent, user) {
 	
-	// if node matches parent id, add the comment to children
+	// if node matches parent id, add the comment to list of children comments and return
 	if (node.id == parent) {
-
-		// sanitize comment content
-		console.log(commentContent);
-		var cleanComment = sanitizeHtml(commentContent);
-
-		node.children.push({ author : user, points : 0, timeCreated : new Date().toISOString(),
-							 comment : cleanComment, children : [], id : new ObjectID()});
+		insert(node, commentContent, parent, user);
+		return;
 	}
-}
-
-// create new ID for individual node
-function addID(node) {
-	node.id = new ObjectID();
-}
-
-// traverse nodes, applying the function and args provided
-function traverseAdd(node, fn, commentContent, parent, user) {
-	fn(node, commentContent, parent, user);
 
 	for (i in node.children) {
 		traverseAdd(node.children[i], fn, commentContent, parent, user);
+	}
+}
+
+// add comment if the parent id matches
+function insertComment(node, commentContent, parent, user) {
+
+	// sanitize comment content to get rid of unwanted HTML markup
+	var cleanComment = sanitizeHtml(commentContent);
+
+	// push JSON comment object to our structure in the appropriate location
+	node.children.push({ 
+		author : user, 
+		points : 0, 
+		timeCreated : new Date().toISOString(),
+		comment : cleanComment, 
+		children : [], 
+		id : new ObjectID()
+	});
+}
+
+// update comment content given its id
+CommentTree.prototype.updateComment = function(commentContent, commentId) {
+
+	for (i in this.structure.bubbles) {
+
+		traverseUpdate(this.structure.bubbles[i], commentContent, commentId);
 	}
 }
 
@@ -160,57 +124,60 @@ function traverseUpdate(node, commentContent, commentId) {
 		// check if comment id matches, if so update
 		if (node.children[i].id == commentId) {
 			console.log("Updating comment...");
+
+			// sanitize comment content to get rid of unwanted HTML markup
 			var cleanComment = sanitizeHtml(commentContent);
-			node.children[i].comment = cleanComment;
-			node.children[i].timeLastEdited = new Date().toISOString();
-			break;
+			
+			node.children[i].comment = cleanComment; // update comment content
+			node.children[i].timeLastEdited = new Date().toISOString(); // update time last edited
+			return;
 		}
 
-		// recurse further into comment tree
+		// recurse further into comment tree if not found
 		traverseUpdate(node.children[i], commentContent, commentId);
 	}
 }
 
-// traverse nodes, removing comment if found
+// remove comment/bubble from the CommentTree given its id
+CommentTree.prototype.removeComment = function(commentId) {
+
+	for (i in this.structure.bubbles) {
+
+		// check if bubble id matches, if so delete it
+		if (this.structure.bubbles[i].id == commentId) {
+			console.log("Deleting bubble...");
+			delete this.structure.bubbles.splice(i, 1);
+			return;
+		}
+
+		// recurse further into comment tree
+		traverseRemove(this.structure.bubbles[i], commentId);
+	}
+}
+
+// traverse comment nodes, removing comment if found
 function traverseRemove(node, commentId) {
 
 	for (i in node.children) {
 
-		// check if comment id matches, if so delete
+		// check if comment id matches, if so delete it
 		if (node.children[i].id == commentId) {
 			console.log("Deleting comment...");
 			delete node.children.splice(i, 1);
-			break;
+			return;
 		}
 
-		// recurse further into comment tree
+		// recurse further into comment tree if not found
 		traverseRemove(node.children[i], commentId);
 	}
 }
 
-// traverse nodes, applying the function provided
-function traverse(node, fn) {
-	fn(node);
-
-	for (i in node.children) {
-		traverse(node.children[i], fn);
-	}
-}
-
-// for testing purposes
-function printTree(node, indent, treeString) {
-	if (node.bubbleName)
-		treeString.ts += indent + node.bubbleName + "\n";
-	else
-		treeString.ts += indent + node.comment + "\n";
-	for (i in node.children) {
-		traverse(node.children[i], indent + "--", treeString);
-	}
-}
-
-// generate the tree structure in html
+// generate the tree structure with the proper HTML markup
+// given the JSON structure of the comment tree
 function generateTreeStructure(node, treeString, user) {
 
+	// instantiate our resource class that contains
+	// our HTML markup
 	var elements = new Elements();
 
 	if (node.bubbleName)
@@ -218,21 +185,27 @@ function generateTreeStructure(node, treeString, user) {
 	else
 		treeString.ts += elements.getCommentItemPrefix(node);
 
-	// add delete button if the user authored the comment or user is admin
+	// add delete button if the user logged in authored the comment or if the user is admin
 	if (user == "admin" || (node.author && node.author == user))
 		treeString.ts += elements.getDeleteForm(node);
 
-	if (node.bubbleName)
+	// bubbles can be minimized or pinned
+	if (node.bubbleName) {
+		treeString.ts += elements.getPinBubbleForm();
 		treeString.ts += elements.getCloseBubbleForm();
+	}
 
+	// include timestamp for when a bubble/comment was created
 	treeString.ts += elements.getTimestamp(node);
 
-	
+	// this contains the actual content of the bubble/comment
 	if (node.bubbleName)
 		treeString.ts += elements.getBubbleText(node.bubbleName);
 	else
 		treeString.ts += elements.getCommentText(node.comment);
 
+	// add time last edited for comments as well as the edit form if the user
+	// currently logged in originally authored the comment
 	if (!node.bubbleName) {
 		// add last edited time if it differs from time created for comments
 		treeString.ts += elements.getEditTimestamp(node);
@@ -242,64 +215,33 @@ function generateTreeStructure(node, treeString, user) {
 			treeString.ts += elements.getEditForm(node);
 	}
 
-	// add share button
+	// add share button (includes a link to the specific comment once clicked)
 	treeString.ts += elements.getShareButton(node);
 
-	// add reply form if user is logged in
+	// add a reply form if the user is logged in
 	if (user)
 		treeString.ts += elements.getReplyForm(node);
 
+	// begin the list of child comments/bubbles
 	treeString.ts += elements.getGroupPrefix();
 
-	// sort children comments by time created
+	// sort children comments by time created (more recent comments appear on top)
 	node.children.sort(sort_by('timeCreated', true, moment));
 
+	// recurse into the comment tree to generate other comments' HTML markup
 	for (var i = 0; i < node.children.length; i++) {
 		generateTreeStructure(node.children[i], treeString, user);
 	}
 
+	// close our HTML tags
 	treeString.ts += elements.getGroupSuffix();
-	
 	treeString.ts += elements.getItemSuffix();
 }
 
-// return the time that the node was created relative to now
-/*function getTimeFromNow(node) {
-	return "<span class='timeCreated pull-right'>" + moment(node.timeCreated).fromNow() + "</span>";
-}*/
-
-// return the time last edited
-/*function getTimeLastEdited(node) {
-
-	// display time last edited if it differs from time created
-	if (node.timeLastEdited)
-		return "<span class='timeLastEdited'>last edited " + moment(node.timeLastEdited).fromNow() + "</span>";
-	return "<span class='timeLastEdited'></span>";
-}*/
-
-// add in comment id into delete comment form
-/*function getDeleteCommentForm(node) {
-
-	if (!node.id)
-		return delForm;
-
-	return delPrefix + node.id + delSuffix;
-}*/
-
-// add in comment id into edit comment form
-/*function getEditCommentForm(node) {
-	return editPrefix + node.id + editSuffix;
-}*/
-
-// add in parent comment id into comment form
-/*function getReplyForm(node) {
-
-	if (!node.id)
-		return replyForm;
-
-	return replyPrefix + node.id + replySuffix;
-}*/
-
+// sort function that takes in the respective field being evaluated,
+// true/false to reverse the sort, and the primer being the method of sorting
+// i.e. do we sort by alphabetical, by number, time, etc..
+// NOTE: This was not written by me, found on StackOverflow
 var sort_by = function(field, reverse, primer){
 
    var key = primer ? 
